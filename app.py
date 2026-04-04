@@ -14,30 +14,40 @@ st.set_page_config(
 
 st.markdown("""
 <style>
-    [data-testid="stSidebar"] { background: #0C2D6B; }
-    [data-testid="stSidebar"] * { color: rgba(255,255,255,0.85) !important; }
-    [data-testid="stSidebar"] .stButton>button {
-        background: rgba(255,255,255,0.08);
-        border: 0.5px solid rgba(255,255,255,0.2);
-        color: white !important; border-radius: 8px; width: 100%;
-    }
-    [data-testid="stSidebar"] .stButton>button:hover { background: rgba(255,255,255,0.15); }
-    .stApp > header { background: transparent; }
     [data-testid="metric-container"] {
-        background: white; border: 0.5px solid #e5e7eb;
-        border-radius: 12px; padding: 1rem 1.2rem;
+        background: white;
+        border: 0.5px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 1rem 1.2rem;
     }
-    [data-testid="stMetricValue"] { font-size: 1.35rem !important; font-weight: 600 !important; color: #0C2D6B !important; }
-    [data-testid="stMetricLabel"] { font-size: 0.75rem !important; color: #6b7280 !important; font-weight: 500 !important; }
-    [data-testid="stMetricDelta"] { font-size: 0.72rem !important; font-weight: 500 !important; }
+    [data-testid="stMetricValue"] {
+        font-size: 1.35rem !important;
+        font-weight: 600 !important;
+        color: #0C2D6B !important;
+    }
+    [data-testid="stMetricLabel"] {
+        font-size: 0.75rem !important;
+        color: #6b7280 !important;
+        font-weight: 500 !important;
+    }
+    [data-testid="stMetricDelta"] {
+        font-size: 0.72rem !important;
+        font-weight: 500 !important;
+    }
     hr { border-color: #e5e7eb; margin: 1rem 0; }
-    h2 { font-size: 1rem !important; font-weight: 600 !important; color: #0C2D6B !important; padding-bottom: 6px; border-bottom: 2px solid #185FA5; margin-bottom: 12px !important; display: inline-block; }
+    h2 {
+        font-size: 1rem !important;
+        font-weight: 600 !important;
+        color: #0C2D6B !important;
+        padding-bottom: 6px;
+        border-bottom: 2px solid #185FA5;
+        margin-bottom: 12px !important;
+        display: inline-block;
+    }
     [data-testid="stAlert"] { border-radius: 10px !important; border-left-width: 4px !important; }
     [data-testid="stFileUploader"] { border: 1.5px dashed #185FA5; border-radius: 10px; padding: 8px; background: #f0f7ff; }
     [data-testid="stDataFrame"] { border-radius: 10px; overflow: hidden; border: 0.5px solid #e5e7eb; }
-    [data-testid="stSelectbox"] > div > div { border-radius: 8px !important; border-color: rgba(255,255,255,0.3) !important; background: rgba(255,255,255,0.08) !important; }
-    .stSpinner > div { border-top-color: #185FA5 !important; }
-    .main .block-container { background: #f8fafc; padding-top: 1.5rem; }
+    .main .block-container { padding-top: 1.5rem; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -45,21 +55,17 @@ if 'user' not in st.session_state:
     st.session_state['user'] = None
 
 def page_login():
-    st.markdown("""
-    <style>
-    .login-wrap { max-width: 400px; margin: 60px auto 0; background: white; border-radius: 16px; padding: 40px; border: 0.5px solid #e5e7eb; }
-    .login-logo { text-align: center; margin-bottom: 24px; }
-    .login-logo h1 { font-size: 1.4rem !important; color: #0C2D6B !important; margin: 8px 0 4px !important; }
-    .login-logo p { color: #6b7280; font-size: 0.85rem; }
-    </style>
-    <div class="login-wrap"><div class="login-logo">
-      <div style="font-size:40px;">🏦</div>
-      <h1>Dashboard ya Banque</h1>
-      <p>Injira na compte yawe kugira urabe données</p>
-    </div></div>
-    """, unsafe_allow_html=True)
     col1, col2, col3 = st.columns([1, 1.2, 1])
     with col2:
+        st.markdown("<br><br>", unsafe_allow_html=True)
+        st.markdown(
+            "<div style='text-align:center;margin-bottom:20px;'>"
+            "<div style='font-size:48px;'>🏦</div>"
+            "<h2 style='color:#0C2D6B;margin:8px 0 4px;'>Dashboard ya Banque</h2>"
+            "<p style='color:#6b7280;font-size:0.85rem;'>Injira na compte yawe kugira urabe données</p></div>",
+            unsafe_allow_html=True
+        )
+        st.divider()
         username = st.text_input("👤 Utilisateur", placeholder="ex: admin, gitega...")
         password = st.text_input("🔒 Mot de passe", type="password", placeholder="Shira password yawe")
         if st.button("Injira →", use_container_width=True, type="primary"):
@@ -78,49 +84,40 @@ user        = st.session_state['user']
 role        = user['role']
 agence_user = user['agence']
 
-st.sidebar.markdown("""
-<div style='text-align:center;padding:16px 0 8px;'>
-  <div style='font-size:28px;'>🏦</div>
-  <div style='font-size:13px;font-weight:600;color:white;margin-top:4px;'>Dashboard Banque</div>
-  <div style='font-size:10px;color:rgba(255,255,255,0.5);'>Burundi — IA Analytics</div>
-</div>
-""", unsafe_allow_html=True)
-
-st.sidebar.markdown(
-    f"<div style='background:rgba(255,255,255,0.1);border-radius:10px;padding:10px 14px;margin:0 0 12px;'>"
-    f"<div style='font-size:11px;color:rgba(255,255,255,0.5);'>Injiye nka</div>"
-    f"<div style='font-size:13px;font-weight:500;color:white;'>{user['nom']}</div>"
-    f"<div style='font-size:10px;color:rgba(29,158,117,0.9);margin-top:2px;'>● {role}</div>"
-    f"</div>",
-    unsafe_allow_html=True
-)
+st.sidebar.markdown("## 🏦 Dashboard Banque")
+st.sidebar.caption("Burundi — IA Analytics")
+st.sidebar.divider()
+st.sidebar.success(f"👤 {user['nom']}")
+st.sidebar.caption(f"Role: {role}")
+st.sidebar.divider()
 
 fichier = None
 if peut_voir(role, 'upload'):
-    st.sidebar.markdown("**📁 Shira données nshasha**")
+    st.sidebar.subheader("📁 Shira données nshasha")
     fichier = st.sidebar.file_uploader(
         "Excel canke CSV y'uyu munsi",
-        type=['xlsx', 'xls', 'csv'],
-        label_visibility="collapsed"
+        type=['xlsx', 'xls', 'csv']
     )
+    st.sidebar.divider()
 
 if agence_user == 'Zose' and role != 'operateur':
-    st.sidebar.markdown("**🔍 Filtre agence**")
+    st.sidebar.subheader("🔍 Filtre agence")
 
-st.sidebar.markdown("---")
+st.sidebar.divider()
 if st.sidebar.button("🚪 Sohoka", use_container_width=True):
     st.session_state['user'] = None
     st.rerun()
 
-with st.sidebar.expander("🔐 Hindura password"):
-    pw_kera    = st.text_input("Kera",    type="password", key="pk")
-    pw_nshasha = st.text_input("Nshasha", type="password", key="pn")
-    pw_ponovya = st.text_input("Ponovya", type="password", key="pp")
+with st.sidebar.expander("🔐 Hindura password yawe"):
+    pw_kera    = st.text_input("Password ya kera",  type="password", key="pk")
+    pw_nshasha = st.text_input("Password nshasha",  type="password", key="pn")
+    pw_ponovya = st.text_input("Ponovya nshasha",   type="password", key="pp")
+    st.sidebar.caption("✓ Ntarengeje 8 · ✓ Ifise numero")
     if st.button("Hindura →", use_container_width=True):
         if pw_kera and pw_nshasha and pw_ponovya:
             ok, msg = hindura_password(user['username'], pw_kera, pw_nshasha, pw_ponovya)
             st.success(msg) if ok else st.error(msg)
-        else: st.warning("Uzuza ibibanza vyose")
+        else: st.warning("⚠ Uzuza ibibanza vyose")
 
 @st.cache_data
 def charger_defaut():
@@ -145,10 +142,10 @@ else:
 
 if agence_user == 'Zose':
     agences = ["Zose"] + sorted(df['agence'].unique().tolist())
-    choix   = st.sidebar.selectbox("Agence", agences) if role != 'operateur' else "Zose"
+    choix   = (st.sidebar.selectbox("Agence", agences) if role != 'operateur' else "Zose")
 else:
     choix = agence_user
-    st.sidebar.info(f"📍 {agence_user}")
+    st.sidebar.info(f"📍 Agence: {agence_user}")
 
 if choix == "Zose":
     df_filtre      = df
@@ -160,10 +157,10 @@ else:
     kigega_montant = df_filtre['kigega_agence'].iloc[-1]
 
 st.markdown(
-    f"<h1 style='color:#0C2D6B;font-size:1.5rem;margin-bottom:4px;'>🏦 Dashboard ya Banque — Burundi</h1>"
-    f"<p style='color:#6b7280;font-size:0.85rem;margin-bottom:12px;'>👤 {user['nom']} &nbsp;|&nbsp; 📍 {choix} &nbsp;|&nbsp; Système de suivi financier avec IA</p>",
+    "<h1 style='color:#0C2D6B;font-size:1.5rem;margin-bottom:4px;'>🏦 Dashboard ya Banque — Burundi</h1>",
     unsafe_allow_html=True
 )
+st.caption(f"👤 {user['nom']} | 📍 {choix} | Système de suivi financier avec IA")
 st.divider()
 
 if peut_voir(role, 'kpis'):
@@ -241,9 +238,9 @@ if peut_voir(role, 'rapport'):
     st.dataframe(mensuel, width='stretch', height=260)
 
 st.markdown("""
-<div style='text-align:center;padding:20px 0 10px;color:#9ca3af;font-size:11px;
-     border-top:0.5px solid #e5e7eb;margin-top:20px;'>
-  Dashboard ya Banque — Burundi &nbsp;|&nbsp;
+<div style='text-align:center;padding:20px 0 10px;color:#9ca3af;
+     font-size:11px;border-top:0.5px solid #e5e7eb;margin-top:20px;'>
+  🏦 Dashboard ya Banque — Burundi &nbsp;|&nbsp;
   Propulsé par Prophet AI &amp; Streamlit &nbsp;|&nbsp;
   Données sécurisées — Accès restreint
 </div>
