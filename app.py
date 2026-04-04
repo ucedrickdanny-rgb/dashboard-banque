@@ -3,6 +3,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
+from datetime import datetime
 from etl import run_pipeline, transform, load, MAPPING_COLONNES
 from previsions import faire_previsions
 from login import verifier_login, peut_voir, hindura_password
@@ -15,35 +16,14 @@ st.set_page_config(
 st.markdown("""
 <style>
     [data-testid="metric-container"] {
-        background: white;
-        border: 0.5px solid #e5e7eb;
-        border-radius: 12px;
-        padding: 1rem 1.2rem;
+        background: white; border: 0.5px solid #e5e7eb;
+        border-radius: 12px; padding: 1rem 1.2rem;
     }
-    [data-testid="stMetricValue"] {
-        font-size: 1.35rem !important;
-        font-weight: 600 !important;
-        color: #0C2D6B !important;
-    }
-    [data-testid="stMetricLabel"] {
-        font-size: 0.75rem !important;
-        color: #6b7280 !important;
-        font-weight: 500 !important;
-    }
-    [data-testid="stMetricDelta"] {
-        font-size: 0.72rem !important;
-        font-weight: 500 !important;
-    }
+    [data-testid="stMetricValue"] { font-size: 1.35rem !important; font-weight: 600 !important; color: #0C2D6B !important; }
+    [data-testid="stMetricLabel"] { font-size: 0.75rem !important; color: #6b7280 !important; font-weight: 500 !important; }
+    [data-testid="stMetricDelta"] { font-size: 0.72rem !important; font-weight: 500 !important; }
     hr { border-color: #e5e7eb; margin: 1rem 0; }
-    h2 {
-        font-size: 1rem !important;
-        font-weight: 600 !important;
-        color: #0C2D6B !important;
-        padding-bottom: 6px;
-        border-bottom: 2px solid #185FA5;
-        margin-bottom: 12px !important;
-        display: inline-block;
-    }
+    h2 { font-size: 1rem !important; font-weight: 600 !important; color: #0C2D6B !important; padding-bottom: 6px; border-bottom: 2px solid #185FA5; margin-bottom: 12px !important; display: inline-block; }
     [data-testid="stAlert"] { border-radius: 10px !important; border-left-width: 4px !important; }
     [data-testid="stFileUploader"] { border: 1.5px dashed #185FA5; border-radius: 10px; padding: 8px; background: #f0f7ff; }
     [data-testid="stDataFrame"] { border-radius: 10px; overflow: hidden; border: 0.5px solid #e5e7eb; }
@@ -94,10 +74,7 @@ st.sidebar.divider()
 fichier = None
 if peut_voir(role, 'upload'):
     st.sidebar.subheader("📁 Shira données nshasha")
-    fichier = st.sidebar.file_uploader(
-        "Excel canke CSV y'uyu munsi",
-        type=['xlsx', 'xls', 'csv']
-    )
+    fichier = st.sidebar.file_uploader("Excel canke CSV y'uyu munsi", type=['xlsx','xls','csv'])
     st.sidebar.divider()
 
 if agence_user == 'Zose' and role != 'operateur':
@@ -156,11 +133,26 @@ else:
     titre_kigega   = f"🏛️ Kigega ca {choix}"
     kigega_montant = df_filtre['kigega_agence'].iloc[-1]
 
+uyu_munsi = datetime.now().strftime("%d/%m/%Y")
+saa_ubu   = datetime.now().strftime("%H:%M")
+
 st.markdown(
     "<h1 style='color:#0C2D6B;font-size:1.5rem;margin-bottom:4px;'>🏦 Dashboard ya Banque — Burundi</h1>",
     unsafe_allow_html=True
 )
 st.caption(f"👤 {user['nom']} | 📍 {choix} | Système de suivi financier avec IA")
+
+st.markdown(
+    f"<div style='display:flex;gap:12px;margin-bottom:12px;'>"
+    f"<div style='background:#EAF3DE;border-left:4px solid #1D9E75;border-radius:0 8px 8px 0;padding:8px 16px;font-size:12px;color:#085041;'>"
+    f"📅 <b>Uyu munsi:</b> {uyu_munsi}</div>"
+    f"<div style='background:#E6F1FB;border-left:4px solid #185FA5;border-radius:0 8px 8px 0;padding:8px 16px;font-size:12px;color:#0C447C;'>"
+    f"🕐 <b>Saa:</b> {saa_ubu}</div>"
+    f"<div style='background:#FAEEDA;border-left:4px solid #BA7517;border-radius:0 8px 8px 0;padding:8px 16px;font-size:12px;color:#633806;'>"
+    f"📊 <b>Données za:</b> {df['date'].min().strftime('%d/%m/%Y')} → {df['date'].max().strftime('%d/%m/%Y')}</div>"
+    f"</div>",
+    unsafe_allow_html=True
+)
 st.divider()
 
 if peut_voir(role, 'kpis'):
@@ -237,11 +229,11 @@ if peut_voir(role, 'rapport'):
     mensuel['mois'] = mensuel['mois'].astype(str)
     st.dataframe(mensuel, width='stretch', height=260)
 
-st.markdown("""
-<div style='text-align:center;padding:20px 0 10px;color:#9ca3af;
-     font-size:11px;border-top:0.5px solid #e5e7eb;margin-top:20px;'>
-  🏦 Dashboard ya Banque — Burundi &nbsp;|&nbsp;
-  Propulsé par Prophet AI &amp; Streamlit &nbsp;|&nbsp;
-  Données sécurisées — Accès restreint
-</div>
-""", unsafe_allow_html=True)
+st.markdown(
+    f"<div style='text-align:center;padding:20px 0 10px;color:#9ca3af;"
+    f"font-size:11px;border-top:0.5px solid #e5e7eb;margin-top:20px;'>"
+    f"🏦 Dashboard ya Banque — Burundi &nbsp;|&nbsp; "
+    f"Propulsé par Prophet AI &amp; Streamlit &nbsp;|&nbsp; "
+    f"📅 {uyu_munsi} saa {saa_ubu}</div>",
+    unsafe_allow_html=True
+)
